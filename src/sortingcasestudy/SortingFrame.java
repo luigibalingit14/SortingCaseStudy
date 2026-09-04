@@ -4,247 +4,213 @@
  *  GROUP 4
  *
  *  MEMBERS:
- *  - BACALLO, Khen Isiah R.
- *  - BALINGIT, Luigi D.
- *  - DUYANEN, Kryzthelle C.
- *  - ESCARTIN, Angelica Maze Z.
- *  - JIMENEZ, Carl Kian B.
- *  - LEONEN, Clark Kirby M.
- *  - NASOL, Aeron Francis L.
- *  - PABILANI, Kizziah Aherica J.
- *  - SORCOSO, Lean Marr M.
- *  - STAGEN, Stanley Fox P.
+ *  - BACALLO, Khen Isiah R.      - LEONEN, Clark Kirby M.
+ *  - BALINGIT, Luigi D.          - NASOL, Aeron Francis L.
+ *  - DUYANEN, Kryzthelle C.      - PABILANI, Kizziah Aherica J.
+ *  - ESCARTIN, Angelica Maze Z.  - SORCOSO, Lean Marr M.
+ *  - JIMENEZ, Carl Kian B.       - STAGEN, Stanley Fox P.
  *
- *  PAANO GUMAGANA ANG PROGRAM NA ITO?
- *  1. Mag-i-input ang user ng array size.
- *  2. Mag-i-input ang user ng mga elements ng array (separated by spaces).
- *  3. Pipili ang user ng sorting algorithm (A/B/C/D) sa combo box.
- *  4. Ipapakita sa output area ang original array, bawat iteration/pass,
- *     hanggang sa maging sorted na ang array.
+ *  PROGRAM FLOW:
+ *  1. Input array size.
+ *  2. Input elements (separated by space).
+ *  3. Choose algorithm (A/B/C/D).
+ *  4. Display step-by-step sorting process.
  * =====================================================================
  */
 package sortingcasestudy;
 
 /**
- * SortingFrame = ito ang main window (GUI) ng program natin.
- *
- * @author Luigi Balingit
+ * SortingFrame
+ * Ito ang main GUI window ng program. Dito nag-i-interact ang user.
+ * 
+ * @author Luigi Balingit (Group 4)
  */
 public class SortingFrame extends javax.swing.JFrame {
 
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(SortingFrame.class.getName());
 
     /**
-     * Constructor - tinatawag ito kapag binuksan ang window.
+     * Constructor: Tumatawag kapag binubuksan ang application.
      */
     public SortingFrame() {
-        initComponents(); // Auto-generated ng NetBeans; itinatatag nito ang design (labels, buttons, etc.)
-        jTextAreaOutput.setEditable(false); // Para HINDI ma-type/ma-edit ng user ang output area
-        jTextAreaOutput.setText("");        // Burahin ang default na "Output display" para malinis magsimula
+        initComponents(); // I-setup ang UI components (buttons, labels, etc.)
+        
+        // UI Tweaks para mas maganda ang dating:
+        jTextAreaOutput.setEditable(false); // Bawal i-type ng user ang output area
+        jTextAreaOutput.setText("");        // Linisin ang default text
     }
 
     /* =================================================================
-     * HELPER METHODS - mga kasangkapan na ginagamit ng buong program
+     * HELPER METHODS (Mga Kasangkapan)
      * ================================================================= */
 
     /**
-     * append() - sumusulat ng isang linya sa output area (JTextArea).
-     * Ang "\n" ay para lumipat sa bagong linya.
+     * append() - Sumusulat ng text sa Output Area.
+     * OPTIMIZATION: May auto-scroll pababa para makita agad ang latest pass.
      */
     private void append(String text) {
         jTextAreaOutput.append(text + "\n");
+        // Auto-scroll: Pinupunta ang cursor sa dulo ng text para laging nakikita ang pinakabagong line
+        jTextAreaOutput.setCaretPosition(jTextAreaOutput.getDocument().getLength());
     }
 
     /**
-     * formatArray() - ginagawang table-style na format ang array.
-     * Example: {9, 5, 1}  ->  "| 9 | 5 | 1 |"
+     * formatArray() - Gina-format ang array para magmukhang table.
+     * Example: [9, 5, 1]  =>  "| 9 | 5 | 1 |"
      */
     private String formatArray(int[] arr) {
-        StringBuilder sb = new StringBuilder("|");     // Simulan sa "|"
-        for (int value : arr) {                        // Ikutan ang bawat element
-            sb.append(" ").append(value).append(" |"); // Ilagay ang value sa gitna ng "|"
+        StringBuilder sb = new StringBuilder("|");
+        for (int value : arr) {
+            sb.append(" ").append(value).append(" |");
         }
         return sb.toString();
     }
 
     /* =================================================================
      * A. BUBBLE SORT
-     * - Pinaghahambing ang MAGKATABING elements, ina-swap kung mali ang ayos.
-     * - Bawat "pass", ang pinakamalaking numero ay napupunta sa dulo.
+     * Concept: Pinaghahambing ang magkatabing numero. Pag mas malaki yung 
+     * nasa kaliwa, i-swap. Parang bubbles na lumulutang sa tubig.
      * ================================================================= */
     private void bubbleSort(int[] arr) {
-        append("BUBBLE SORT");
-        append("Original: " + formatArray(arr)); // Ipakita muna ang original na array
+        append("=== BUBBLE SORT ===");
+        append("Original: " + formatArray(arr));
 
         int n = arr.length;
+        for (int i = 0; i < n - 1; i++) {
+            boolean swapped = false; // Flag para i-check kung may nag-swap
 
-        for (int i = 0; i < n - 1; i++) {         // Outer loop = bilang ng passes
-            boolean swapped = false;              // Flag: may na-swap ba sa pass na ito?
-
-            for (int j = 0; j < n - 1 - i; j++) { // Inner loop = paghahambing ng magkatabi
-                if (arr[j] > arr[j + 1]) {        // Kung mali ang ayos...
-                    int temp = arr[j];            // ...i-SWAP ang dalawa
+            for (int j = 0; j < n - 1 - i; j++) {
+                if (arr[j] > arr[j + 1]) {
+                    // SWAP Logic
+                    int temp = arr[j];
                     arr[j] = arr[j + 1];
                     arr[j + 1] = temp;
-                    swapped = true;               // Markahan na may nangyaring swap
+                    swapped = true;
                 }
             }
-
-            append("Pass " + (i + 1) + ":  " + formatArray(arr)); // Ipakita ang array pagkatapos ng pass
-
-            if (!swapped) { // Kung walang na-swap, sorted na = hinto na
-                break;
-            }
+            append("Pass " + (i + 1) + ":    " + formatArray(arr));
+            
+            // Optimization: Kung walang nag-swap, sorted na. Hinto na!
+            if (!swapped) break; 
         }
-
-        append("Sorted:  " + formatArray(arr)); // Final na sorted array
-        append("");                             // Blank line (pampaganda ng spacing)
+        append("Sorted:   " + formatArray(arr) + "\n");
     }
 
     /* =================================================================
      * B. SELECTION SORT
-     * - Hinahanap ang PINAKAMALIIT na element sa natitirang bahagi,
-     *   tapos inilalagay ito sa tamang posisyon sa unahan.
+     * Concept: Hanapin ang PINAKAMALIIT na numero sa natitirang array, 
+     * tapos ilagay sa pinaka-unahan.
      * ================================================================= */
     private void selectionSort(int[] arr) {
-        append("SELECTION SORT");
+        append("=== SELECTION SORT ===");
         append("Original: " + formatArray(arr));
 
         int n = arr.length;
+        for (int i = 0; i < n - 1; i++) {
+            int minIndex = i; // Assume muna na yung current position ang pinakamaliit
 
-        for (int i = 0; i < n - 1; i++) {     // Ikutan ang bawat posisyon ng array
-            int minIndex = i;                 // Akala muna: current ang pinakamaliit
-
-            for (int j = i + 1; j < n; j++) { // Hanapin ang totoong pinakamaliit sa kanan
+            // Hanapin ang totoong pinakamaliit sa natitirang bahagi
+            for (int j = i + 1; j < n; j++) {
                 if (arr[j] < arr[minIndex]) {
-                    minIndex = j;             // Natagpuan ang mas maliit, itala ang index
+                    minIndex = j; // Update kung may nakitang mas maliit
                 }
             }
 
-            if (minIndex != i) {              // Kung iba ang pinakamaliit, i-swap
+            // Swap kung yung pinakamaliit ay hindi yung nasa current position
+            if (minIndex != i) {
                 int temp = arr[i];
                 arr[i] = arr[minIndex];
                 arr[minIndex] = temp;
             }
-
-            append("Pass " + (i + 1) + ":  " + formatArray(arr)); // Ipakita ang array pagkatapos ng pass
+            append("Pass " + (i + 1) + ":    " + formatArray(arr));
         }
-
-        append("Sorted:  " + formatArray(arr));
-        append("");
+        append("Sorted:   " + formatArray(arr) + "\n");
     }
 
     /* =================================================================
      * C. INSERTION SORT
-     * - Kinukuha ang bawat element (key), tapos isinisingit ito
-     *   sa tamang lugar sa bahaging sorted na sa kaliwa.
-     * - Parang nag-aayos ng cards sa kamay.
+     * Concept: Parang nag-aayos ng playing cards. Kinukuha ang isang card 
+     * tapos isinisingit (insert) sa tamang pwesto sa mga naka-sort na.
      * ================================================================= */
     private void insertionSort(int[] arr) {
-        append("INSERTION SORT");
+        append("=== INSERTION SORT ===");
         append("Original: " + formatArray(arr));
 
-        for (int i = 1; i < arr.length; i++) { // Simulan sa ikalawang element
-            int key = arr[i];                  // Ang element na isisingit (insert)
-            int j = i - 1;                     // Simulan ang paghahambing sa kaliwa ng key
+        for (int i = 1; i < arr.length; i++) {
+            int key = arr[i]; // Ang card na hawak natin ngayon
+            int j = i - 1;
 
-            // I-shift pakanan ang mga element na mas malaki sa key
-            // hanggang sa mahanap ang tamang puwesto ng key
+            // I-shift pakanan ang mga card na mas malaki sa key
             while (j >= 0 && arr[j] > key) {
-                arr[j + 1] = arr[j]; // I-shift ang element pakanan
-                j--;                 // Lumipat sa susunod na kaliwa
+                arr[j + 1] = arr[j];
+                j--;
             }
-
-            arr[j + 1] = key; // Isingit ang key sa tamang posisyon
-
-            append("Pass " + i + ":  " + formatArray(arr)); // Ipakita ang array pagkatapos ng insertion
+            // Isingit ang key sa tamang butas
+            arr[j + 1] = key; 
+            append("Pass " + i + ":      " + formatArray(arr));
         }
-
-        append("Sorted:  " + formatArray(arr));
-        append("");
+        append("Sorted:   " + formatArray(arr) + "\n");
     }
 
     /* =================================================================
      * D. MERGE SORT (Divide and Conquer)
-     * - Hatiin ang array nang paulit-ulit (divide),
-     *   tapos pagsamahin nang nakaayos (merge).
+     * Concept: Hatiin ang array sa maliliit na piraso hanggang sa mag-isa 
+     * na lang, tapos pagsamahin (merge) nang naka-sort.
      * ================================================================= */
-
-    /**
-     * mergeSortWrapper() - panimulang method para sa Merge Sort.
-     * Dito nagsisimula ang proseso at dito rin ipinapakita ang final output.
-     */
     private void mergeSortWrapper(int[] arr) {
-        append("MERGE SORT");
+        append("=== MERGE SORT ===");
         append("Original: " + formatArray(arr));
 
-        if (arr.length <= 1) { // Kung 1 element lang o wala, sorted na agad
-            append("Sorted:  " + formatArray(arr));
-            append("");
+        if (arr.length <= 1) {
+            append("Sorted:   " + formatArray(arr) + "\n");
             return;
         }
 
-        int[] temp = new int[arr.length];        // Temporary array na gagamitin sa pag-merge
-        mergeSort(arr, temp, 0, arr.length - 1); // Simulan ang recursive na paghahati
-
-        append("Sorted:  " + formatArray(arr));
-        append("");
+        int[] temp = new int[arr.length];
+        mergeSortRecursive(arr, temp, 0, arr.length - 1);
+        append("Sorted:   " + formatArray(arr) + "\n");
     }
 
-    /**
-     * mergeSort() - RECURSIVE method: hahatiin ang array hanggang sa
-     * mag-isang element na lang, tapos i-merge pabalik nang nakaayos.
-     */
-    private void mergeSort(int[] arr, int[] temp, int left, int right) {
-        if (left < right) { // Kung may mahahati pa (hindi pa single element)
-            int mid = (left + right) / 2; // Gitnang punto ng hati
+    private void mergeSortRecursive(int[] arr, int[] temp, int left, int right) {
+        if (left < right) {
+            int mid = (left + right) / 2;
 
-            mergeSort(arr, temp, left, mid);      // Hatiin at ayusin ang KALIWA
-            mergeSort(arr, temp, mid + 1, right); // Hatiin at ayusin ang KANAN
+            // Divide: Hatiin ang kaliwa at kanan
+            mergeSortRecursive(arr, temp, left, mid);
+            mergeSortRecursive(arr, temp, mid + 1, right);
 
-            merge(arr, temp, left, mid, right); // Pagsamahin ang dalawang bahagi nang sorted
-
-            append("Merge:  " + formatArray(arr)); // Ipakita ang array pagkatapos ng bawat merge
+            // Conquer: Pagsamahin ang dalawang hati
+            mergeArrays(arr, temp, left, mid, right);
+            append("Merge:    " + formatArray(arr));
         }
     }
 
-    /**
-     * merge() - pinagsasama ang dalawang sorted na bahagi
-     * (left..mid at mid+1..right) para maging isang sorted na bahagi.
-     */
-    private void merge(int[] arr, int[] temp, int left, int mid, int right) {
-        // Kopyahin muna lahat sa temporary array (backup habang naghahambing)
+    private void mergeArrays(int[] arr, int[] temp, int left, int mid, int right) {
+        // I-copy sa temporary array para safe ang data habang nagha-halo
         for (int i = left; i <= right; i++) {
             temp[i] = arr[i];
         }
 
-        int i = left;    // Pointer sa simula ng KALIWANG bahagi
-        int j = mid + 1; // Pointer sa simula ng KANANG bahagi
-        int k = left;    // Pointer sa posisyon sa orihinal na array
+        int i = left;    // Pointer ng kaliwang bahagi
+        int j = mid + 1; // Pointer ng kanang bahagi
+        int k = left;    // Pointer ng main array
 
-        // Paghahambingin ang dalawang bahagi, ilalagay muna ang mas maliit
+        // Paghambingin at isulat ang mas maliit
         while (i <= mid && j <= right) {
             if (temp[i] <= temp[j]) {
-                arr[k] = temp[i]; // Mas maliit ang kaliwa, kunin ito
+                arr[k] = temp[i];
                 i++;
             } else {
-                arr[k] = temp[j]; // Mas maliit ang kanan, kunin ito
+                arr[k] = temp[j];
                 j++;
             }
             k++;
         }
 
-        // Kung may natira pa sa KALIWANG bahagi, ilipat lahat
+        // Ilipat ang mga natirang nasa kaliwa (kung mayroon man)
         while (i <= mid) {
             arr[k] = temp[i];
             i++;
-            k++;
-        }
-
-        // Kung may natira pa sa KANANG bahagi, ilipat lahat
-        while (j <= right) {
-            arr[k] = temp[j];
-            j++;
             k++;
         }
     }
@@ -257,55 +223,115 @@ public class SortingFrame extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jLabel1 = new javax.swing.JLabel();
-        jTextFieldSize = new javax.swing.JTextField();
-        jLabel2 = new javax.swing.JLabel();
-        jTextFieldElements = new javax.swing.JTextField();
-        jLabel3 = new javax.swing.JLabel();
-        jComboBoxAlgorithm = new javax.swing.JComboBox<>();
-        j_jButtonSort = new javax.swing.JButton();
+        jLabel5 = new javax.swing.JLabel();
+        jLabel6 = new javax.swing.JLabel();
+        logoLabel2 = new CustomControl.LogoLabel();
+        logoLabel1 = new CustomControl.LogoLabel();
+        glassPanel1 = new CustomControl.GlassPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTextAreaOutput = new javax.swing.JTextArea();
+        j_jButtonSort = new javax.swing.JButton();
+        jComboBoxAlgorithm = new javax.swing.JComboBox<>();
+        jLabel3 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        jLabel1 = new javax.swing.JLabel();
+        jTextFieldSize = new javax.swing.JTextField();
+        jTextFieldElements = new javax.swing.JTextField();
+        jLabel7 = new javax.swing.JLabel();
+        jLabel8 = new javax.swing.JLabel();
+        modernLabel1 = new CustomControl.ModernLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setPreferredSize(new java.awt.Dimension(500, 500));
+        setTitle("SORTING ALGORITHMS VISUALIZER");
+        setSize(new java.awt.Dimension(900, 700));
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jLabel1.setFont(new java.awt.Font("Poppins Black", 0, 12)); // NOI18N
-        jLabel1.setText("Enter array size:");
-        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 100, 140, 20));
+        jLabel5.setFont(new java.awt.Font("Poppins Black", 0, 14)); // NOI18N
+        jLabel5.setForeground(new java.awt.Color(241, 245, 249));
+        jLabel5.setText("COLLEGE OF COMPUTING AND INFORMATION SCIENCES");
+        getContentPane().add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 30, 430, 70));
 
-        jTextFieldSize.setFont(new java.awt.Font("Poppins Black", 0, 12)); // NOI18N
-        jTextFieldSize.addActionListener(this::jTextFieldSizeActionPerformed);
-        getContentPane().add(jTextFieldSize, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 100, 250, 30));
+        jLabel6.setFont(new java.awt.Font("Poppins Black", 0, 26)); // NOI18N
+        jLabel6.setForeground(new java.awt.Color(241, 245, 249));
+        jLabel6.setText("UNIVERSITY OF MAKATI ");
+        getContentPane().add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 10, 340, 70));
 
-        jLabel2.setFont(new java.awt.Font("Poppins Black", 0, 12)); // NOI18N
-        jLabel2.setText("Enter array elements:");
-        getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 160, -1, -1));
+        logoLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Assests/CCIS-Logo-Official-1-1-705x705.png"))); // NOI18N
+        logoLabel2.setText("logoLabel1");
+        getContentPane().add(logoLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 20, 90, 60));
 
-        jTextFieldElements.setFont(new java.awt.Font("Poppins Black", 0, 12)); // NOI18N
-        getContentPane().add(jTextFieldElements, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 150, 250, 30));
+        logoLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Assests/UMak-Logo-Registered-Favicon.png"))); // NOI18N
+        logoLabel1.setText("logoLabel1");
+        getContentPane().add(logoLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 20, 90, 60));
 
-        jLabel3.setFont(new java.awt.Font("Poppins Black", 0, 12)); // NOI18N
-        jLabel3.setText("Choose Sorting Algorithm:");
-        getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 210, -1, -1));
+        glassPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jComboBoxAlgorithm.setFont(new java.awt.Font("Poppins Black", 0, 12)); // NOI18N
-        jComboBoxAlgorithm.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "A. Bubble Sort", "B. Selection Sort", "C. Insertion Sort", "D. Merge Sort" }));
-        getContentPane().add(jComboBoxAlgorithm, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 240, -1, -1));
-
-        j_jButtonSort.setFont(new java.awt.Font("Poppins Black", 0, 12)); // NOI18N
-        j_jButtonSort.setText("SUBMIT");
-        j_jButtonSort.addActionListener(this::j_jButtonSortActionPerformed);
-        getContentPane().add(j_jButtonSort, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 240, -1, -1));
-
+        jTextAreaOutput.setEditable(false);
+        jTextAreaOutput.setBackground(new java.awt.Color(102, 102, 102));
         jTextAreaOutput.setColumns(20);
         jTextAreaOutput.setFont(new java.awt.Font("Poppins Black", 0, 12)); // NOI18N
+        jTextAreaOutput.setForeground(new java.awt.Color(0, 204, 0));
         jTextAreaOutput.setRows(5);
         jTextAreaOutput.setText("Output display:\n");
+        jTextAreaOutput.setBorder(null);
         jScrollPane1.setViewportView(jTextAreaOutput);
 
-        getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 290, 240, 110));
+        glassPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 250, 570, 130));
+
+        j_jButtonSort.setBackground(new java.awt.Color(0, 102, 0));
+        j_jButtonSort.setFont(new java.awt.Font("Poppins Black", 0, 12)); // NOI18N
+        j_jButtonSort.setForeground(new java.awt.Color(255, 255, 255));
+        j_jButtonSort.setText("SUBMIT");
+        j_jButtonSort.addActionListener(this::j_jButtonSortActionPerformed);
+        glassPanel1.add(j_jButtonSort, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 210, -1, -1));
+
+        jComboBoxAlgorithm.setBackground(new java.awt.Color(102, 102, 102));
+        jComboBoxAlgorithm.setFont(new java.awt.Font("Poppins Black", 0, 12)); // NOI18N
+        jComboBoxAlgorithm.setForeground(new java.awt.Color(255, 255, 255));
+        jComboBoxAlgorithm.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "A. Bubble Sort", "B. Selection Sort", "C. Insertion Sort", "D. Merge Sort" }));
+        glassPanel1.add(jComboBoxAlgorithm, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 210, -1, -1));
+
+        jLabel3.setFont(new java.awt.Font("Poppins Black", 0, 12)); // NOI18N
+        jLabel3.setForeground(new java.awt.Color(241, 245, 249));
+        jLabel3.setText("Choose Sorting Algorithm:");
+        glassPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 180, -1, -1));
+
+        jLabel2.setFont(new java.awt.Font("Poppins Black", 0, 12)); // NOI18N
+        jLabel2.setForeground(new java.awt.Color(241, 245, 249));
+        jLabel2.setText("Enter array elements:");
+        glassPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 110, -1, -1));
+
+        jLabel1.setFont(new java.awt.Font("Poppins Black", 0, 12)); // NOI18N
+        jLabel1.setForeground(new java.awt.Color(241, 245, 249));
+        jLabel1.setText("Enter array size:");
+        glassPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 110, 140, 20));
+
+        jTextFieldSize.setBackground(new java.awt.Color(102, 102, 102));
+        jTextFieldSize.setFont(new java.awt.Font("Poppins Black", 0, 12)); // NOI18N
+        jTextFieldSize.setForeground(new java.awt.Color(255, 255, 255));
+        jTextFieldSize.addActionListener(this::jTextFieldSizeActionPerformed);
+        glassPanel1.add(jTextFieldSize, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 140, 250, 30));
+
+        jTextFieldElements.setBackground(new java.awt.Color(102, 102, 102));
+        jTextFieldElements.setFont(new java.awt.Font("Poppins Black", 0, 12)); // NOI18N
+        jTextFieldElements.setForeground(new java.awt.Color(255, 255, 255));
+        glassPanel1.add(jTextFieldElements, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 140, 250, 30));
+
+        jLabel7.setFont(new java.awt.Font("Poppins Black", 0, 24)); // NOI18N
+        jLabel7.setForeground(new java.awt.Color(241, 245, 249));
+        jLabel7.setText("SORTING ALGORITHMS VISUALIZER");
+        glassPanel1.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 10, 460, 70));
+
+        jLabel8.setFont(new java.awt.Font("Poppins Black", 0, 14)); // NOI18N
+        jLabel8.setForeground(new java.awt.Color(241, 245, 249));
+        jLabel8.setText("Data Structures & Algorithms Midterm Case Study | Group 4");
+        glassPanel1.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 40, 480, 70));
+
+        getContentPane().add(glassPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 190, 660, 400));
+
+        modernLabel1.setForeground(new java.awt.Color(241, 245, 249));
+        modernLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Assests/visax-r9DV-EdDmWM-unsplash.jpg"))); // NOI18N
+        getContentPane().add(modernLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 900, 700));
 
         pack();
         setLocationRelativeTo(null);
@@ -316,74 +342,71 @@ public class SortingFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_jTextFieldSizeActionPerformed
 
     private void j_jButtonSortActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_j_jButtonSortActionPerformed
-        
-        jTextAreaOutput.setText(""); // Linisin muna ang dating output
+                                                        
+        jTextAreaOutput.setText(""); // Linisin ang lumang output
 
         try {
-            // STEP 1: Kunin ang array size mula sa text field at gawing numero
+            // 1. KUNIN ANG SIZE
             int size = Integer.parseInt(jTextFieldSize.getText().trim());
-
-            // Validation: dapat positibo ang size
             if (size <= 0) {
-                append("Please enter an array size greater than 0.");
+                append("⚠️ Error: Array size must be greater than 0.");
                 return;
             }
 
-            // STEP 2: Kunin ang mga elements na tinype ng user
+            // 2. KUNIN ANG ELEMENTS
             String elementsText = jTextFieldElements.getText().trim();
-
-            // Validation: dapat may nilagay na elements
             if (elementsText.isEmpty()) {
-                append("Please enter array elements separated by spaces.");
+                append("⚠️ Error: Please enter array elements separated by spaces.");
                 return;
             }
 
-            // Hatiin ang input base sa spaces.
-            // Example: "9 5 1 4 3" -> {"9","5","1","4","3"}
-            String[] tokens = elementsText.split("\\s+");
-
-            // Validation: dapat sapat ang bilang ng elements sa size
+            // 3. I-PARSE ANG MGA ELEMENTS
+            String[] tokens = elementsText.split("\\s+"); // Hatiin base sa space
             if (tokens.length < size) {
-                append("Need " + size + " elements, but only " + tokens.length + " entered.");
+                append("⚠️ Error: Need " + size + " elements, but only " + tokens.length + " entered.");
                 return;
             }
 
-            // STEP 3: Ilagay ang mga elements sa int array
             int[] arr = new int[size];
             for (int i = 0; i < size; i++) {
-                arr[i] = Integer.parseInt(tokens[i]); // I-convert ang string -> int
+                arr[i] = Integer.parseInt(tokens[i]);
             }
 
-            // STEP 4: Alamin kung anong algorithm ang pinili sa combo box
-            String choice = jComboBoxAlgorithm.getSelectedItem() == null
-                    ? ""
-                    : jComboBoxAlgorithm.getSelectedItem().toString().toUpperCase();
+            // 4. ALAMIN ANG PINILING ALGORITHM
+            String choice = jComboBoxAlgorithm.getSelectedItem().toString().toUpperCase();
 
-            // STEP 5: Tumawag ng tamang sorting method base sa pinili
-            // (Gumamit ng clone() para may backup ng original na input)
-            if (choice.contains("BUBBLE") || choice.startsWith("A")) {
-                bubbleSort(arr.clone());
-            } else if (choice.contains("SELECTION") || choice.startsWith("B")) {
-                selectionSort(arr.clone());
-            } else if (choice.contains("INSERTION") || choice.startsWith("C")) {
-                insertionSort(arr.clone());
-            } else if (choice.contains("MERGE") || choice.startsWith("D")) {
-                mergeSortWrapper(arr.clone());
-            } else {
-                append("Please choose A, B, C, or D.");
+            // 5. I-EXECUTE ANG TAMANG SORTING ALGORITHM
+            switch (choice) {
+                case "A. BUBBLE SORT":
+                    bubbleSort(arr.clone());
+                    break;
+                case "B. SELECTION SORT":
+                    selectionSort(arr.clone());
+                    break;
+                case "C. INSERTION SORT":
+                    insertionSort(arr.clone());
+                    break;
+                case "D. MERGE SORT":
+                    mergeSortWrapper(arr.clone());
+                    break;
+                default:
+                    append("⚠️ Error: Please choose a valid algorithm.");
+                    break;
             }
 
         } catch (NumberFormatException ex) {
-            // Kapag may na-type na hindi numero, dito tayo dadapo
-            append("Invalid input. Please use whole numbers only.");
+            // Dito dadapo kapag nag-type ng letters (halimbawa: "abc") sa number fields
+            append("⚠️ Invalid Input: Please use whole numbers only.");
         }
+    
+     
     }//GEN-LAST:event_j_jButtonSortActionPerformed
 
     /**
      * @param args the command line arguments
      */
     public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
+/* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
          * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
@@ -402,17 +425,25 @@ public class SortingFrame extends javax.swing.JFrame {
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(() -> new SortingFrame().setVisible(true));
+    
     }
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private CustomControl.GlassPanel glassPanel1;
     private javax.swing.JComboBox<String> jComboBoxAlgorithm;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTextArea jTextAreaOutput;
     private javax.swing.JTextField jTextFieldElements;
     private javax.swing.JTextField jTextFieldSize;
     private javax.swing.JButton j_jButtonSort;
+    private CustomControl.LogoLabel logoLabel1;
+    private CustomControl.LogoLabel logoLabel2;
+    private CustomControl.ModernLabel modernLabel1;
     // End of variables declaration//GEN-END:variables
 }
