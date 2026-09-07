@@ -29,6 +29,12 @@ public class SortingFrame extends javax.swing.JFrame {
 
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(SortingFrame.class.getName());
 
+    /* =================================================================
+     * PART 1: CLASS STRUCTURE & PROGRAM INITIALIZATION
+     * Assigned to: BACALLO, Khen Isiah R.
+     * Guide: Ipaliwanag ang SortingFrame class. I-explain na ang constructor 
+     * ang unang tumatakbo para i-setup ang UI at gawing read-only ang output.
+     * ================================================================= */
     /**
      * Constructor: Tumatawag kapag binubuksan ang application.
      */
@@ -41,7 +47,10 @@ public class SortingFrame extends javax.swing.JFrame {
     }
 
     /* =================================================================
-     * HELPER METHODS (Mga Kasangkapan)
+     * PART 2: OUTPUT HELPER METHODS
+     * Assigned to: NASOL, Aeron Francis L.
+     * Guide: Ipaliwanag kung paano gumagana ang append() na may auto-scroll, 
+     * at kung paano ginagawang table-format ng formatArray() gamit ang StringBuilder.
      * ================================================================= */
 
     /**
@@ -67,9 +76,10 @@ public class SortingFrame extends javax.swing.JFrame {
     }
 
     /* =================================================================
-     * A. BUBBLE SORT
-     * Concept: Pinaghahambing ang magkatabing numero. Pag mas malaki yung 
-     * nasa kaliwa, i-swap. Parang bubbles na lumulutang sa tubig.
+     * PART 3: BUBBLE SORT ALGORITHM
+     * Assigned to: DUYANEN, Kryzthelle C.
+     * Guide: I-explain ang logic ng pag-compare ng magkatabing elements at pag-swap.
+     * Huwag kalimutan i-mention ang 'swapped' flag bilang optimization.
      * ================================================================= */
     private void bubbleSort(int[] arr) {
         append("=== BUBBLE SORT ===");
@@ -97,9 +107,10 @@ public class SortingFrame extends javax.swing.JFrame {
     }
 
     /* =================================================================
-     * B. SELECTION SORT
-     * Concept: Hanapin ang PINAKAMALIIT na numero sa natitirang array, 
-     * tapos ilagay sa pinaka-unahan.
+     * PART 4: SELECTION SORT ALGORITHM
+     * Assigned to: ESCARTIN, Angelica Maze Z.
+     * Guide: I-explain ang paghahanap ng pinakamaliit na element (minIndex) 
+     * sa unsorted portion at pag-swap nito sa current position. Isang swap lang per pass.
      * ================================================================= */
     private void selectionSort(int[] arr) {
         append("=== SELECTION SORT ===");
@@ -128,9 +139,10 @@ public class SortingFrame extends javax.swing.JFrame {
     }
 
     /* =================================================================
-     * C. INSERTION SORT
-     * Concept: Parang nag-aayos ng playing cards. Kinukuha ang isang card 
-     * tapos isinisingit (insert) sa tamang pwesto sa mga naka-sort na.
+     * PART 5: INSERTION SORT ALGORITHM
+     * Assigned to: JIMENEZ, Carl Kian B.
+     * Guide: I-explain ang 'key' element at kung paano nashi-shift pakanan 
+     * ang mga mas malaking numero bago i-insert ang key.
      * ================================================================= */
     private void insertionSort(int[] arr) {
         append("=== INSERTION SORT ===");
@@ -153,9 +165,10 @@ public class SortingFrame extends javax.swing.JFrame {
     }
 
     /* =================================================================
-     * D. MERGE SORT (Divide and Conquer)
-     * Concept: Hatiin ang array sa maliliit na piraso hanggang sa mag-isa 
-     * na lang, tapos pagsamahin (merge) nang naka-sort.
+     * PART 6: MERGE SORT ALGORITHM (Divide & Conquer)
+     * Assigned to: LEONEN, Clark Kirby M.
+     * Guide: I-explain ang paghati (Divide) gamit ang recursion at pag-merge (Conquer)
+     * gamit ang temporary array para safe ang pag-aayos.
      * ================================================================= */
     private void mergeSortWrapper(int[] arr) {
         append("=== MERGE SORT ===");
@@ -214,6 +227,12 @@ public class SortingFrame extends javax.swing.JFrame {
             k++;
         }
     }
+    /* =================================================================
+     * PART 7: GUI DESIGN (Glassmorphism & Custom Controls)
+     * Assigned to: SORCOSO, Lean Marr M.
+     * Guide: I-explain ang components at layout (GlassPanel, ModernLabel). 
+     * Paalala na auto-generated ang code na ito ng NetBeans GUI Builder.
+     * ================================================================= */
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -346,6 +365,12 @@ public class SortingFrame extends javax.swing.JFrame {
         jTextAreaOutput.setText(""); // Linisin ang lumang output
 
         try {
+            /* =================================================================
+             * PART 8: INPUT VALIDATION & ERROR HANDLING
+             * Assigned to: PABILANI, Kizziah Aherica J.
+             * Guide: I-explain ang pagkuha ng size, pag-check kung blangko, 
+             * split ng elements, paglipat sa array, at ang try-catch block.
+             * ================================================================= */
             // 1. KUNIN ANG SIZE
             int size = Integer.parseInt(jTextFieldSize.getText().trim());
             if (size <= 0) {
@@ -372,6 +397,12 @@ public class SortingFrame extends javax.swing.JFrame {
                 arr[i] = Integer.parseInt(tokens[i]);
             }
 
+            /* =================================================================
+             * PART 9: ALGORITHM SELECTION & SWITCH DISPATCH
+             * Assigned to: BALINGIT, Luigi D.
+             * Guide: I-explain ang pagpili ng algorithm mula sa ComboBox at 
+             * ang pag-dispatch gamit ang switch statement. Explain rin ang pag-clone ng array.
+             * ================================================================= */
             // 4. ALAMIN ANG PINILING ALGORITHM
             String choice = jComboBoxAlgorithm.getSelectedItem().toString().toUpperCase();
 
@@ -402,6 +433,12 @@ public class SortingFrame extends javax.swing.JFrame {
      
     }//GEN-LAST:event_j_jButtonSortActionPerformed
 
+    /* =================================================================
+     * PART 10: MAIN METHOD, TESTING & SAMPLE RUNS
+     * Assigned to: STAGEN, Stanley Fox P.
+     * Guide: I-explain ang main method bilang entry point, at ang invokeLater 
+     * para sa Thread Safety ng Swing GUI. Maghanda rin para sa test runs.
+     * ================================================================= */
     /**
      * @param args the command line arguments
      */
